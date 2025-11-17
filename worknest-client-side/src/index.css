@@ -1,0 +1,97 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: false;
+}
+
+@theme {
+  /* Background & Text */
+  --color-background: rgb(250 250 250); /* off-white */
+  --color-foreground: rgb(17 24 39); /* gray-900 */
+
+  /* Primary Colors (Modern Indigo-Blue mix) */
+  --color-primary: rgb(79 70 229); /* indigo-600 */
+  --color-primary-foreground: rgb(255 255 255);
+  --color-primary-hover: rgb(67 56 202); /* indigo-700 */
+
+  /* Secondary Colors (Teal / Productivity Accent) */
+  --color-secondary: rgb(20 184 166); /* teal-500 */
+  --color-secondary-foreground: rgb(255 255 255);
+  --color-secondary-hover: rgb(13 148 136); /* teal-600 */
+
+  /* Accent (Vibrant Amber for highlights) */
+  --color-accent: rgb(245 158 11);
+  --color-accent-foreground: rgb(255 255 255);
+  --color-accent-hover: rgb(217 119 6);
+
+  /* Neutral / Muted */
+  --color-neutral: rgb(31 41 55);
+  --color-neutral-foreground: rgb(255 255 255);
+  --color-muted: rgb(243 244 246);
+  --color-muted-foreground: rgb(107 114 128);
+
+  /* Success / Warning / Error / Info */
+  --color-success: rgb(34 197 94);
+  --color-warning: rgb(245 158 11);
+  --color-error: rgb(239 68 68);
+  --color-info: rgb(59 130 246);
+
+  /* Gradient for hero sections */
+  --gradient-hero: linear-gradient(135deg, rgb(79 70 229), rgb(20 184 166));
+
+  /* Border / Input / Ring */
+  --color-border: rgb(229 231 235);
+  --color-input: rgb(229 231 235);
+  --color-ring: rgb(79 70 229);
+
+  /* Card / Popover */
+  --color-card: rgb(255 255 255);
+  --color-card-foreground: rgb(17 24 39);
+  --color-popover: rgb(255 255 255);
+  --color-popover-foreground: rgb(17 24 39);
+}
+
+/* Dark Mode */
+.dark {
+  --color-background: rgb(17 24 39);
+  --color-foreground: rgb(243 244 246);
+
+  --color-primary: rgb(99 102 241);
+  --color-primary-foreground: rgb(255 255 255);
+  --color-primary-hover: rgb(79 70 229);
+
+  --color-secondary: rgb(45 212 191);
+  --color-secondary-foreground: rgb(255 255 255);
+  --color-secondary-hover: rgb(20 184 166);
+
+  --color-accent: rgb(251 191 36);
+  --color-accent-foreground: rgb(17 24 39);
+  --color-accent-hover: rgb(245 158 11);
+
+  --color-neutral: rgb(31 41 55);
+  --color-neutral-foreground: rgb(255 255 255);
+  --color-muted: rgb(55 65 81);
+  --color-muted-foreground: rgb(156 163 175);
+
+  --color-border: rgb(55 65 81);
+  --color-input: rgb(55 65 81);
+  --color-ring: rgb(99 102 241);
+
+  --color-card: rgb(31 41 55);
+  --color-card-foreground: rgb(243 244 246);
+  --color-popover: rgb(31 41 55);
+  --color-popover-foreground: rgb(243 244 246);
+
+  /* Optional gradient tone for dark mode hero sections */
+  --gradient-hero: linear-gradient(135deg, rgb(99 102 241), rgb(45 212 191));
+}
+
+.fix-alignment {
+  @apply max-w-screen-xl mx-auto px-5 lg:px-0;
+}
+
+.btn-primary {
+  @apply cursor-pointer overflow-hidden rounded-lg h-10 px-5 bg-primary text-white text-base font-semibold hover:bg-primary/90 transition-colors;
+}
+.btn-secondary {
+  @apply cursor-pointer overflow-hidden rounded-lg h-10 px-5 bg-accent text-white text-base font-semibold hover:bg-accent/90 transition-colors;
+}
