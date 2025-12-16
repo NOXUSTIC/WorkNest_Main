@@ -7,6 +7,7 @@ const socketHandler = require("./socket/socket");
 
 const PORT = process.env.PORT || 3000;
 
+
 const userRoutes = require("./routes/userRoutes");
 const workspaceRoutes = require("./routes/workspaceRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
@@ -33,6 +34,7 @@ socketHandler(io);
 // DB
 connectDB();
 
+// Middleware
 // Middleware
 app.use(cors());
 app.use(express.json());
