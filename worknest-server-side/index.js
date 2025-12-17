@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
-
+const PORT = process.env.PORT || 3000;
 const userRoutes = require("./routes/userRoutes");
 const workspaceRoutes = require("./routes/workspaceRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
@@ -18,8 +18,8 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/api", userRoutes);
-app.use("/api", workspaceRoutes);
+app.use(userRoutes);
+app.use("/dashboard", workspaceRoutes);
 app.use("/api", notificationRoutes);
 app.use("/api", attendanceRoutes);
 
