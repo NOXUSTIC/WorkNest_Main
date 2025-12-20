@@ -537,11 +537,7 @@ const MyActivity = () => {
 
 export default MyActivity;
 import { useState, useEffect, useContext, useRef } from "react";
-<<<<<<< HEAD
 import { Clock, Timer, Calendar, User, LogIn, LogOut, Building2, Home } from "lucide-react";
-=======
-import { Clock, Timer, Calendar, User, LogIn, LogOut } from "lucide-react";
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
 import { AuthContext } from "../../contexts/AuthContext";
 import axios from "axios";
 
@@ -554,20 +550,9 @@ const MyActivity = () => {
   const [success, setSuccess] = useState("");
   const [userData, setUserData] = useState({});
   const [buttonLoading, setButtonLoading] = useState(false);
-<<<<<<< HEAD
   const [selectedWorkMode, setSelectedWorkMode] = useState(null);
   const hasRun = useRef(false);
 
-=======
-  const hasRun = useRef(false);
-
-  const getToday = () => {
-    const d = new Date();
-    d.setHours(0, 0, 0, 0);
-    return d;
-  };
-
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
   const formatTime = dateString =>
     dateString
       ? new Date(dateString).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
@@ -580,12 +565,8 @@ const MyActivity = () => {
       const response = await axios.get(`http://localhost:3000/users/${user.uid}`);
       setUserData(response.data.users);
       return response.data.users;
-<<<<<<< HEAD
     } catch (err) {
       console.error("Error fetching user data:", err);
-=======
-    } catch {
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
       setError("Failed to load user data");
       return {};
     }
@@ -593,7 +574,6 @@ const MyActivity = () => {
 
   const fetchAttendanceData = async () => {
     try {
-<<<<<<< HEAD
       console.log("🔄 Fetching attendance data for user:", user.uid);
       const response = await axios.get(`http://localhost:3000/api/attendance/${user.uid}`);
       const data = response.data.attendance || [];
@@ -644,26 +624,6 @@ const MyActivity = () => {
       } else {
         setError("Failed to fetch attendance data");
       }
-=======
-      const response = await axios.get(`http://localhost:3000/api/attendance/${user.uid}`);
-      const data = response.data.attendance || [];
-      setAttendanceData(data);
-      
-      const today = getToday();
-      const todayRecord = data.find(record => {
-        const recordDate = new Date(record.date);
-        recordDate.setHours(0, 0, 0, 0);
-        return recordDate.getTime() === today.getTime();
-      });
-      
-      if (todayRecord) {
-        setCurrentStatus(todayRecord);
-      }
-      
-      return data;
-    } catch {
-      setError("Failed to fetch attendance data");
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
       return [];
     }
   };
@@ -676,7 +636,6 @@ const MyActivity = () => {
       return;
     }
 
-<<<<<<< HEAD
     if (!selectedWorkMode) {
       setError("Please select your work mode (Office or Remote) before checking in.");
       return;
@@ -687,14 +646,11 @@ const MyActivity = () => {
       return;
     }
 
-=======
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
     try {
       setButtonLoading(true);
       setError("");
       setSuccess("");
 
-<<<<<<< HEAD
       console.log("🔵 Sending check-in request...");
       console.log("📝 Using data:", {
         employeeId: user.uid,
@@ -721,29 +677,13 @@ const MyActivity = () => {
           console.log("🔄 Refreshing attendance data after check-in...");
           await fetchAttendanceData();
         }, 500);
-=======
-      const response = await axios.post("http://localhost:3000/api/attendance/checkin", {
-        employeeId: user.uid,
-        employeeName: userData.name || "Unknown User",
-      });
-
-      if (response.data.success) {
-        setCurrentStatus(response.data.attendance);
-        setSuccess("Check-in successful!");
-        
-        await fetchAttendanceData();
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
         
         setTimeout(() => setSuccess(""), 3000);
       }
     } catch (error) {
-<<<<<<< HEAD
       console.error("❌ Check-in failed:", error);
       console.error("Response data:", error.response?.data);
       
-=======
-      console.error("Check-in failed:", error);
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
       if (error.response?.data?.message === "Already checked in today") {
         setError("Already checked in today.");
       } else {
@@ -772,17 +712,13 @@ const MyActivity = () => {
       setError("");
       setSuccess("");
 
-<<<<<<< HEAD
       console.log("🔴 Sending check-out request...");
       console.log("📝 Current status before checkout:", currentStatus);
       
-=======
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
       const response = await axios.put("http://localhost:3000/api/attendance/checkout", {
         employeeId: user.uid,
       });
 
-<<<<<<< HEAD
       console.log("✅ Check-out response:", response.data);
 
       if (response.data.success) {
@@ -796,23 +732,12 @@ const MyActivity = () => {
           console.log("🔄 Refreshing attendance data after check-out...");
           await fetchAttendanceData();
         }, 500);
-=======
-      if (response.data.success) {
-        setCurrentStatus(response.data.attendance);
-        setSuccess("Check-out successful!");
-        
-        await fetchAttendanceData();
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
         
         setTimeout(() => setSuccess(""), 3000);
       }
     } catch (error) {
-<<<<<<< HEAD
       console.error("❌ Check-out failed:", error);
       console.error("Response data:", error.response?.data);
-=======
-      console.error("Check-out failed:", error);
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
       setError(error.response?.data?.message || "Check-out failed");
     } finally {
       setButtonLoading(false);
@@ -881,7 +806,6 @@ const MyActivity = () => {
 
       <div className="bg-card border border-border rounded-lg p-6">
         <h2 className="text-lg font-semibold mb-4">Today's Status</h2>
-<<<<<<< HEAD
         
         {/* Work Mode Selection */}
         {!currentStatus?.checkInTime && (
@@ -936,8 +860,6 @@ const MyActivity = () => {
           </div>
         )}
 
-=======
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
             <LogIn className="w-5 h-5 text-green-600" />
@@ -965,19 +887,11 @@ const MyActivity = () => {
         <div className="flex gap-4">
           <button
             onClick={handleCheckIn}
-<<<<<<< HEAD
             disabled={buttonLoading || currentStatus?.checkInTime || !userData.name || !selectedWorkMode}
             className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition flex items-center justify-center gap-2"
           >
             <LogIn className="w-5 h-5" />
             {buttonLoading ? "Processing..." : !userData.name ? "Loading..." : !selectedWorkMode ? "Select Work Mode" : "Check In"}
-=======
-            disabled={buttonLoading || currentStatus?.checkInTime}
-            className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition flex items-center justify-center gap-2"
-          >
-            <LogIn className="w-5 h-5" />
-            {buttonLoading ? "Processing..." : "Check In"}
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
           </button>
           <button
             onClick={handleCheckOut}
@@ -1008,10 +922,7 @@ const MyActivity = () => {
             <thead>
               <tr className="border-b border-border">
                 <th className="text-left py-3 px-4 font-medium">Date</th>
-<<<<<<< HEAD
                 <th className="text-left py-3 px-4 font-medium">Work Mode</th>
-=======
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
                 <th className="text-left py-3 px-4 font-medium">Check-in Time</th>
                 <th className="text-left py-3 px-4 font-medium">Check-out Time</th>
                 <th className="text-left py-3 px-4 font-medium">Total Hours</th>
@@ -1020,11 +931,7 @@ const MyActivity = () => {
             <tbody>
               {attendanceData.length === 0 ? (
                 <tr>
-<<<<<<< HEAD
                   <td colSpan="5" className="text-center py-8 text-muted-foreground">
-=======
-                  <td colSpan="4" className="text-center py-8 text-muted-foreground">
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
                     No attendance records found
                   </td>
                 </tr>
@@ -1035,7 +942,6 @@ const MyActivity = () => {
                       <Calendar className="w-4 h-4 text-muted-foreground" />
                       {formatDate(record.date)}
                     </td>
-<<<<<<< HEAD
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
                         {record.workMode === 'office' ? (
@@ -1051,8 +957,6 @@ const MyActivity = () => {
                         )}
                       </div>
                     </td>
-=======
->>>>>>> 270bc1ae19b568e3a652a09f65a92d1027cbffc3
                     <td className="py-3 px-4">{formatTime(record.checkInTime)}</td>
                     <td className="py-3 px-4">{formatTime(record.checkOutTime)}</td>
                     <td className="py-3 px-4">{record.totalHours ? `${record.totalHours.toFixed(2)} hrs` : "-"}</td>
