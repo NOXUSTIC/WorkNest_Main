@@ -84,7 +84,7 @@ const getLatestAnalytics = async (req, res) => {
       meetings: meetingCountByDay[day] || 0,
     }));
 
-    // Attendance split by day and mode
+    // Attendance split by day, mode
     const attendanceDocs = await Attendance.find({ day: { $in: days } }).select(
       "day mode"
     );
