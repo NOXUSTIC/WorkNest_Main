@@ -246,6 +246,9 @@ const DashboardLayout = () => {
               <LayoutDashboard size={20} />
               <span className="font-medium">Dashboard</span>
             </NavLink>
+            <NavLink to="/dashboard/nestboard" className={linkClasses} end>
+              <LayoutDashboard size={20} />
+              <span className="font-medium">NestBoard</span>
 
             <NavLink to="/dashboard/desk-booking" className={linkClasses}>
               <MapPin size={20} />

@@ -14,6 +14,7 @@ import { Link } from "react-router";
 import { AuthContext } from "../contexts/AuthContext";
 import useUserRole from "../hooks/useUserRole";
 import Loading from "../components/Loading";
+import WeatherWidget from "./Dashboardcomponents/WeatherWidget";
 
 const DashboardHome = () => {
   const { user } = use(AuthContext);
@@ -87,7 +88,7 @@ const DashboardHome = () => {
       </div>
 
       {/* Weather Card */}
-      <div className="bg-card border border-border rounded-xl p-6 flex items-center gap-4">
+      {/* <div className="bg-card border border-border rounded-xl p-6 flex items-center gap-4">
         <div className="p-3 rounded-lg bg-primary/10">
           <WeatherIcon className="w-6 h-6 text-primary" />
         </div>
@@ -97,6 +98,15 @@ const DashboardHome = () => {
           </p>
           <p className="font-medium text-foreground">{weatherMessage}</p>
         </div>
+      </div> */}
+      <WeatherWidget />
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard icon={MapPin} label="Available Desks" value="—" />
+        <StatCard icon={Calendar} label="Your Bookings" value="—" />
+        <StatCard icon={Users} label="Team in Office" value="—" />
+        <StatCard icon={Building2} label="Meeting Rooms" value="—" />
       </div>
 
       {/* Stats */}

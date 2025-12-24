@@ -17,6 +17,7 @@ import CompleteProfile from "../components/CompleteProfile";
 import About from "../pages/About";
 import AllUsers from "../Dashboard/Dashboardcomponents/AllUsers";
 import ManageWorkspace from "../Dashboard/Dashboardcomponents/ManageWorkspace";
+import NestBoard from "../Dashboard/Dashboardcomponents/NestBoard";
 import EmployeeSupportChat from "../Dashboard/Dashboardcomponents/EmployeeSupportChat";
 import AdminChatRoom from "../Dashboard/Dashboardcomponents/AdminChatRoom";
 
@@ -60,6 +61,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: DashboardHome,
+      },
+      {
+        path: "/dashboard/nestboard",
+        Component: NestBoard,
       },
 
       {

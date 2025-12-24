@@ -12,6 +12,8 @@ const workspaceRoutes = require("./routes/workspaceRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const attendanceRoutes = require("./routes/attendanceRoutes");
+const taskRoutes = require("./routes/taskRoutes");
+const port = process.env.PORT || 3000;
 const chatRoutes = require("./routes/chatRoutes");
 
 const app = express();
@@ -41,6 +43,7 @@ app.use("/dashboard", workspaceRoutes);
 app.use("/dashboard", analyticsRoutes);
 app.use("/api", attendanceRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/dashboard", taskRoutes);
 app.use(chatRoutes);
 
 // server run
