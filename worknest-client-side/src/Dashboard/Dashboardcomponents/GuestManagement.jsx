@@ -1,4 +1,5 @@
 import { useState, useEffect, use } from "react";
+import { useNavigate } from "react-router";
 import {
   Users,
   CheckCircle,
@@ -10,18 +11,30 @@ import {
   Calendar,
   Search,
   Filter,
+  Lock,
 } from "lucide-react";
 import axios from "axios";
 import { AuthContext } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
+import useUserRole from "../../hooks/useUserRole";
 
 const GuestManagement = () => {
   const { user } = use(AuthContext);
+  const navigate = useNavigate();
+  const { role, loading: roleLoading } = useUserRole();
   const [guests, setGuests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState("pending");
   const [searchTerm, setSearchTerm] = useState("");
   const [actionLoading, setActionLoading] = useState(null);
+
+  // Check if user is admin - redirect if not
+  useEffect(() => {
+    if (!roleLoading && role !== "admin") {
+      toast.error("Access Denied: Only administrators can access guest management");
+      navigate("/dashboard");
+    }
+  }, [role, roleLoading, navigate]);
 
   // Fetch guests
   const fetchGuests = async () => {
@@ -46,8 +59,10 @@ const GuestManagement = () => {
   };
 
   useEffect(() => {
-    fetchGuests();
-  }, [filterStatus]);
+    if (role === "admin") {
+      fetchGuests();
+    }
+  }, [filterStatus, role]);
 
   // Approve guest
   const handleApprove = async (guestId) => {
@@ -137,6 +152,41 @@ const GuestManagement = () => {
     rejected: guests.filter((g) => g.status === "rejected").length,
     active: guests.filter((g) => g.status === "checked_in").length,
   };
+
+  // Show loading state while verifying role
+  if (roleLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="text-muted-foreground mt-4">Verifying access...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show access denied if not admin
+  if (role !== "admin") {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center space-y-4">
+          <div className="p-4 bg-red-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto">
+            <Lock className="w-8 h-8 text-red-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-foreground">Access Denied</h2>
+          <p className="text-muted-foreground max-w-sm">
+            Only administrators can access the guest management section. If you believe this is an error, please contact your administrator.
+          </p>
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="mt-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            Back to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

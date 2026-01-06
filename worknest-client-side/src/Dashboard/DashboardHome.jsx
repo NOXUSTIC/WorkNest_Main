@@ -16,6 +16,49 @@ import useUserRole from "../hooks/useUserRole";
 import Loading from "../components/Loading";
 import WeatherWidget from "./Dashboardcomponents/WeatherWidget";
 
+const quickActions = [
+  {
+    id: 1,
+    title: "Book a Desk",
+    description: "Reserve a workspace for your day",
+    icon: MapPin,
+    path: "/dashboard/desk-booking",
+    color: "primary",
+    available: true,
+    adminOnly: false,
+  },
+  {
+    id: 2,
+    title: "Book a Meeting Room",
+    description: "Schedule meetings with ease",
+    icon: Calendar,
+    path: "/dashboard/meeting-rooms",
+    color: "primary",
+    available: true,
+    adminOnly: false,
+  },
+  {
+    id: 3,
+    title: "View My Bookings",
+    description: "Check your upcoming reservations",
+    icon: Users,
+    path: "/dashboard/my-bookings",
+    color: "primary",
+    available: true,
+    adminOnly: false,
+  },
+  {
+    id: 4,
+    title: "Guest Management",
+    description: "Manage visitor requests",
+    icon: Building2,
+    path: "/dashboard/guest-management",
+    color: "primary",
+    available: true,
+    adminOnly: true,
+  },
+];
+
 const DashboardHome = () => {
   const { user } = use(AuthContext);
   const { role } = useUserRole();
@@ -25,6 +68,7 @@ const DashboardHome = () => {
 
   const uid = user?.uid;
 
+  // greeting
   const hour = new Date().getHours();
   const greeting =
     hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
@@ -97,7 +141,7 @@ const DashboardHome = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {quickActions
-                .filter((action) => action.available)
+                .filter((action) => action.available && (!action.adminOnly || role === "admin"))
                 .map((action, index) => (
                   <Link
                     key={index}
@@ -193,6 +237,9 @@ const DashboardHome = () => {
               </div>
             )} */}
           </div>
+        </div>
+        {/* Right Column - Additional Info */}
+        <div className="space-y-8">
       {/* Weather Card */}
       {/* <div className="bg-card border border-border rounded-xl p-6 flex items-center gap-4">
         <div className="p-3 rounded-lg bg-primary/10">
@@ -213,6 +260,8 @@ const DashboardHome = () => {
         <StatCard icon={Calendar} label="Your Bookings" value="—" />
         <StatCard icon={Users} label="Team in Office" value="—" />
         <StatCard icon={Building2} label="Meeting Rooms" value="—" />
+      </div>
+        </div>
       </div>
 
       {/* Quick Actions */}

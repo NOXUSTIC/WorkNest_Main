@@ -85,6 +85,46 @@ const updateWorkspaceStatus = async (req, res) => {
     res.status(500).json({ message: "Failed to update workspace status" });
   }
 };
+const updateWorkspace = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+    
+    const workspace = await Workspace.findByIdAndUpdate(
+      id,
+      updates,
+      { new: true, runValidators: true }
+    );
+    
+    if (!workspace) {
+      return res.status(404).json({ message: "Workspace not found" });
+    }
+    
+    res.status(200).json({ success: true, workspace });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update workspace" });
+  }
+};
+
+const deleteWorkspace = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const workspace = await Workspace.findByIdAndDelete(id);
+    
+    if (!workspace) {
+      return res.status(404).json({ message: "Workspace not found" });
+    }
+    
+    res.status(200).json({ 
+      success: true, 
+      message: "Workspace deleted successfully" 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to delete workspace" });
+  }
+};
 
 module.exports = {
   createWorkspace,
