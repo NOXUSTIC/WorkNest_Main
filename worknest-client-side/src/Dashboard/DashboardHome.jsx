@@ -25,7 +25,6 @@ const DashboardHome = () => {
 
   const uid = user?.uid;
 
-  // greeting
   const hour = new Date().getHours();
   const greeting =
     hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";

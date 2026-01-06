@@ -30,9 +30,6 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
 
-// Create HTTP server FIRST
-const server = http.createServer(app);
-
 // NOW create Socket.IO with the server
 const io = new Server(server, {
   cors: {
