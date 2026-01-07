@@ -14,6 +14,7 @@ const activeRoutes = require("./routes/activeRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const guestRoutes = require("./routes/guestRoutes"); // NEW: Guest routes
+const bookingRoutes = require("./routes/bookingRoute"); // NEW: Booking routes
 
 // Debug: Check which routes are undefined
 console.log(" Debug - Route Types:");
@@ -50,7 +51,7 @@ app.use(
     origin: ["http://localhost:5173", "http://localhost:3000", "*"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "x-user-uid"],
   })
 );
 
@@ -75,10 +76,11 @@ app.use(userRoutes);
 app.use("/api", attendanceRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/guest", guestRoutes); // Guest routes
+app.use("/api/bookings", bookingRoutes); // Booking routes
 
 // OTHER ROUTES
 app.use(userRoutes);
-app.use("/dashboard", workspaceRoutes);
+app.use("/api/dashboard", workspaceRoutes);
 app.use("/api", notificationRoutes);
 app.use("/api", attendanceRoutes);
 app.use("/dashboard", activeRoutes);

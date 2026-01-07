@@ -57,7 +57,7 @@ const DeskBooking = () => {
   useEffect(() => {
     const fetchDesks = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/dashboard/workspaces");
+        const res = await axios.get("http://localhost:3000/api/dashboard/workspace");
 
         const deskList = (res.data.workspaces || []).filter(
           (d) => d.type === "desk" && d.status === "active"

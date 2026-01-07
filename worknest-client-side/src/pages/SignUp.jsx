@@ -139,10 +139,11 @@ const SignUp = () => {
 
   const handleGoogleLogin = async () => {
     try {
+      setLoading(true);
       const result = await googleSignIn();
       const user = result.user;
 
-      // Check if user exists
+      // Check if user exists in database
       let userExists = false;
       let userData = null;
       try {
@@ -162,34 +163,43 @@ const SignUp = () => {
       }
 
       if (!userExists) {
-        // Create new user
+        // New user - create in database
         const createResponse = await axios.post("http://localhost:3000/users", {
           uid: user.uid,
           email: user.email,
           name: user.displayName || "",
-          photoURL: user.photoURL,
+          photoURL: user.photoURL || null,
           profileCompleted: false,
         });
 
         if (createResponse.data.success) {
           showNotification(
-            "🎉 Account created with Google! Check your email.",
+            "🎉 Account created with Google! Complete your profile.",
             "success"
           );
 
+          // Always navigate to complete-profile for new users
           setTimeout(() => {
             navigate("/complete-profile");
-          }, 2000);
+          }, 1500);
+        } else {
+          throw new Error("Failed to create user");
         }
       } else {
-        // User exists, navigate based on profile completion
-        userData.profileCompleted
-          ? navigate("/dashboard")
-          : navigate("/complete-profile");
+        // Existing user - navigate based on profile completion
+        if (userData.profileCompleted) {
+          showNotification("Welcome back to WorkNest!", "success");
+          navigate("/dashboard");
+        } else {
+          showNotification("Complete your profile to continue.", "info");
+          navigate("/complete-profile");
+        }
       }
     } catch (error) {
-      console.error("Google login error:", error);
-      showNotification("Google login failed. Please try again.", "error");
+      console.error("Google signup error:", error);
+      showNotification("Google signup failed. Please try again.", "error");
+    } finally {
+      setLoading(false);
     }
   };
 

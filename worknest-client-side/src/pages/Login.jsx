@@ -1,16 +1,18 @@
 import { use, useState } from "react";
 import { Eye, EyeOff, Building2, Lock } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router";
+import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNotification } from "../contexts/NotificationContext";
 
 const Login = () => {
-  const { signInUser } = use(AuthContext);
+  const { signInUser, googleSignIn } = use(AuthContext);
   const { showNotification } = useNotification();
 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -24,6 +26,72 @@ const Login = () => {
       }, 1000); // Delay navigation to allow toast to show
     } catch (error) {
       console.error("Sign-in failed:", error);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      setLoading(true);
+      const result = await googleSignIn();
+      const user = result.user;
+
+      // Check if user exists in database
+      let userExists = false;
+      let userData = null;
+      try {
+        const res = await axios.get(`http://localhost:3000/users/${user.uid}`);
+        if (res.data.user) {
+          userExists = true;
+          userData = res.data.user;
+        }
+      } catch (err) {
+        // 404 is expected for new users
+        if (err.response?.status === 404) {
+          userExists = false;
+        } else {
+          console.error("Error checking user:", err);
+          throw err;
+        }
+      }
+
+      if (!userExists) {
+        // New user - create in database
+        const createResponse = await axios.post("http://localhost:3000/users", {
+          uid: user.uid,
+          email: user.email,
+          name: user.displayName || "",
+          photoURL: user.photoURL || null,
+          profileCompleted: false,
+        });
+
+        if (createResponse.data.success) {
+          showNotification(
+            "🎉 Account created with Google! Complete your profile.",
+            "success"
+          );
+
+          // Navigate to complete-profile for new users
+          setTimeout(() => {
+            navigate("/complete-profile");
+          }, 1500);
+        } else {
+          throw new Error("Failed to create user");
+        }
+      } else {
+        // Existing user - navigate based on profile completion
+        if (userData.profileCompleted) {
+          showNotification("Welcome back to WorkNest!", "success");
+          navigate(location?.state || "/dashboard");
+        } else {
+          showNotification("Complete your profile to continue.", "info");
+          navigate("/complete-profile");
+        }
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+      showNotification("Google login failed. Please try again.", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -137,6 +205,31 @@ const Login = () => {
                     className="w-full bg-primary text-primary-foreground font-semibold py-4 rounded-lg hover:bg-primary-hover transition-colors duration-200 mt-6 h-14 shadow-lg hover:shadow-xl"
                   >
                     Login
+                  </button>
+
+                  {/* Google Sign In Button */}
+                  <div className="flex items-center justify-center mt-6">
+                    <div className="border-t border-border w-full"></div>
+                    <span className="mx-4 text-muted-foreground">or</span>
+                    <div className="border-t border-border w-full"></div>
+                  </div>
+                  <button
+                    onClick={handleGoogleLogin}
+                    className="w-full bg-white text-black font-semibold py-4 rounded-lg hover:bg-gray-100 transition-colors duration-200 mt-6 h-14 shadow-lg hover:shadow-xl flex items-center justify-center"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <span>Loading...</span>
+                    ) : (
+                      <>
+                        <img
+                          src="https://developers.google.com/identity/images/g-logo.png"
+                          alt="Google logo"
+                          className="w-6 h-6 mr-2"
+                        />
+                        Sign in with Google
+                      </>
+                    )}
                   </button>
 
                   {/* Sign Up Link */}

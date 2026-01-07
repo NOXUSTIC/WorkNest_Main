@@ -6,7 +6,6 @@ import {
   Zap,
   Thermometer,
   Wind,
-  RefreshCw,
   Home,
   Building2,
   Coffee,
@@ -170,12 +169,6 @@ export default function WeatherWidget() {
   const suggestion = getWorkSuggestion(data, units);
   const SuggestionIcon = suggestion?.icon || Cloud;
 
-  const handleRefresh = () => {
-    localStorage.removeItem(CACHE_KEY);
-    setLoading(true);
-    setData(null);
-  };
-
   return (
     <div className="bg-card border border-border rounded-xl p-6">
       {/* Header */}
@@ -189,16 +182,6 @@ export default function WeatherWidget() {
             {data?.name && ` • ${data.name}`}
           </p>
         </div>
-
-        <button
-          onClick={handleRefresh}
-          className="p-2 hover:bg-muted rounded-lg transition-colors"
-          disabled={loading}
-        >
-          <RefreshCw
-            className={`w-5 h-5 text-primary ${loading ? "animate-spin" : ""}`}
-          />
-        </button>
       </div>
 
       {/* Weather Data */}
@@ -206,7 +189,7 @@ export default function WeatherWidget() {
         {loading && !data ? (
           <div className="flex items-center justify-center py-8">
             <div className="text-center">
-              <RefreshCw className="w-8 h-8 text-primary animate-spin mx-auto mb-3" />
+              <Cloud className="w-8 h-8 text-primary animate-spin mx-auto mb-3" />
               <p className="text-sm text-muted-foreground">
                 Checking weather...
               </p>
@@ -216,7 +199,7 @@ export default function WeatherWidget() {
           <div className="text-center py-6">
             <Cloud className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-50" />
             <p className="text-error text-sm mb-3">{error}</p>
-            <button onClick={handleRefresh} className="btn btn-outline btn-sm">
+            <button onClick={() => window.location.reload()} className="btn btn-outline btn-sm">
               Try Again
             </button>
           </div>

@@ -58,7 +58,7 @@ const MeetingRooms = () => {
     const fetchRooms = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/dashboard/workspaces"
+          "http://localhost:3000/api/dashboard/workspace"
         );
 
         const activeRooms = (res.data.workspaces || []).filter(
